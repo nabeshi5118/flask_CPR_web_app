@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title>処理完了</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <h1>処理完了</h1>
+  <div class="result">
+    <!-- ここに処理結果を表示 -->
+    <p>{{ result.message }}</p>
+    <p>---------- CPR評価 ----------</p>
+    <p>圧迫回数 : {{result.compression_count}} 回</p>
+    <p>圧迫解除適正率 : {{result.appro_recoils_percent}} %</p>
+    <p>圧迫深度適正率 : {{result.appro_compression_percent}} %</p>
+    <p>平均テンポ : {{result.mean_tempo}} (回/分)</p>
+    <p>テンポの適正率 : {{result.appro_tempo_percent}} %</p>
+    <p>解析動画</p>
+    <video src="{{url_for('static', filename='result/YOLOv8.MP4') }}" controls></video>
+    <p>プロット画像</p>
+    <img src="{{ url_for('static', filename='result/output_csv.png') }}">
+
+  </div>
+  <a href="/">戻る</a>
+</body>
+</html>

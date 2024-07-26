@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <title>ファイルアップロード</title>
+</head>
+<body>
+  <!-- アップロードフォーム -->
+  <form action="/upload" method="POST" enctype="multipart/form-data"> <!-- method属性がPOSTに設定されています -->
+    <h2>ファイルをアップロード</h2>
+    <input type="file" name="file">
+    <input type="submit" value="アップロード">
+  </form>
+</body>
+</html>
