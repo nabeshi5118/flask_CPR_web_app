@@ -67,7 +67,7 @@ def upload_file():
 
 @app.route('/analyze/<filename>')
 def analyze(filename):
-  return render_template('cpr_app/analyze_test.html', filename=filename)
+  return render_template('cpr_app/analyze.html', filename=filename)
 
 @app.route('/progress/<filename>', methods=['POST'])
 def progress(filename):
