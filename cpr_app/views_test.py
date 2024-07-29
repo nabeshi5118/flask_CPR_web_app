@@ -65,6 +65,8 @@ def upload_file():
     flash('許可されていないファイル形式です', 'error')
     return redirect(request.url)
 
+
+
 @app.route('/analyze/<filename>')
 def analyze(filename):
   return render_template('cpr_app/analyze.html', filename=filename)

@@ -27,6 +27,7 @@ def before_request():
   #g.my_object = PeakDataOutput()
   print("peak before")
 
+#最初に飛ぶ所
 @app.route('/')
 def index():
   my_dict = {
@@ -77,42 +78,61 @@ def progress(filename):
   #キャッシュフォルダを自動で作る関数を作ろう
   cache_path = app.config['CACHE_PASS'] + '/'
   video = VideoData(video_path)
-
+  PJ = ConfigJson(app.config['JSON_PASS']+'/progress.json')
+  #progressの状態を保存するjsonファイル
+  print(step+"step start")
   # ステップごとに適切な処理とメッセージを設定
   if step == '1':
     #初期化
     set_csv(csv_paths)
     #jsonファイル名はconfig.json
     initialize_file()
-    message = '姿勢推定中'
+    tmp = {'message':'姿勢推定中',"progress":100}
+    PJ.add_json(tmp)
     print("step1")
 
   elif step == '2':
     #以下で解析を実行する
+    PJ.add_json({'message':'データ解析中',"progress":0})
     exe = write_csv_yolo_cpr.YOLOv8Estimator(video_path,csv_paths,cache_path,app.config['ERROR_MESSAGE'])
-    exe.estimation_algorithm()
+    exe.estimation_algorithm(app.config['JSON_PASS']+'/progress.json')
     
-    message = 'データ解析中'
+    PJ.add_json({'message':'データ解析中',"progress":100})
     print("step2")
     
     
   elif step == '3':
+    PJ.add_json({'message':'動画作成中',"progress":0})
     #キーポイントは10番の右手首で行ってみる(要確認)
     output_name = 'output_csv.png'
     print(video.time)
     plot_csv.plot_csv_data(csv_paths,app.config['RESULT_PASS'],output_name,video.fps,video.time)
-    message = '動画作成中'
+    PJ.add_json({'message':'動画作成中',"progress":100})
     print("step3")
   
   elif step == '4':
-    reconstruction_video.make_video(app.config['CACHE_PASS'] , app.config['RESULT_PASS'] + '/YOLOv8.MP4',video.fps)
-    message = '解析終了'
+    PJ.add_json({'message':'解析終了',"progress":0})
+    reconstruction_video.make_video(app.config['CACHE_PASS'] , app.config['RESULT_PASS'] + '/YOLOv8.MP4',119.88)
+    PJ.add_json({'message':'解析終了',"progress":100})
     print("step4")
 
   else:
     message = '無効なステップです.'
 
-  return jsonify({'message': message})
+  #ここでjson形式でresponceをjsに飛ばしている
+  return jsonify(PJ.json_to_dict())
+
+#現在の進捗を更新する
+@app.route('/progress_status/<filename>', methods=['GET'])
+def progress_status(filename):
+    try:
+        status =  ConfigJson(app.config['JSON_PASS']+'/progress.json')
+        print(status.json_to_dict)
+        return jsonify(status.json_to_dict())
+    except FileNotFoundError:
+        return jsonify({'progress': 0, 'message': '進捗情報が見つかりませんでした。'})
+
+
 
 @app.route('/finish', methods=['GET'])
 def finish():
@@ -121,6 +141,7 @@ def finish():
   add_tmp = {
     'message':"処理が完了しました。処理結果はここに表示されます。"
     }
+  #余裕があればここを"result.json"にしたい
   CJ =  ConfigJson(app.config['JSON_PASS']+'/'+'config.json')
   CJ.add_json(add_tmp)
 

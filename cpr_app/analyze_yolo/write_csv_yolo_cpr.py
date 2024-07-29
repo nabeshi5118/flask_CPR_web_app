@@ -9,6 +9,7 @@ import shutil
 import csv
 import torch
 import json
+from cpr_app.config_json import ConfigJson as CJ
 
 class YOLOv8Estimator:
     def __init__(self, video, csv_paths, cache_path, error_message):
@@ -20,11 +21,16 @@ class YOLOv8Estimator:
         self.error_message = error_message
         print(self.csv_paths,self.cache_path)
 
-    def estimation_algorithm(self):
+
+    #json: 
+    def estimation_algorithm(self,json = None,picture = None):
         """
         YOLOv8を使用して人体パーツの推定を行い、GUI描画と結果のCSVファイルへの書き込みを行うメソッド
         """
         print("start")
+        #webアプリケーション用
+        if json != None:
+            status = CJ(json) 
         # Load a model
         model = YOLO('model/yolov8x-pose-p6.pt') 
         
@@ -70,7 +76,10 @@ class YOLOv8Estimator:
             #ここで100枚ごとにコメントを書いてる
             if count%100 is 0:
                 print("finished",count)
-
+                #webアプリケーション用
+                if(json != None):
+                    print(str(picture))
+                    update_progress(status,count,picture)
             
             if cv2.waitKey(5) & 0xFF == 27:
                 break
@@ -93,11 +102,15 @@ class YOLOv8Estimator:
                     print(e)
                     print(self.video + '|  frame ' + str(count) + "| " + '| keypoints ' \
                     + str(i) + '\n')
-                
 
-    #進捗バーを変更するために存在。ここに居ちゃいけないやつだからいつか引っ越す
-    #def update_progress():
 
+             
+def update_progress(status,count,total):
+    #ここで100枚ごとにコメントを書いてる  
+    progress = float(count / total) 
+    print("progress"+str(progress))
+    i = {'progress':progress}
+    status.add_json(i)
 
 # テストコード (インスタンス作成とメソッド呼び出し)
 if __name__ == "__main__":

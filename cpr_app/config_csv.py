@@ -1,6 +1,6 @@
 #Yoloのキーポイントの数だけcsvファイルを作成している
 import os
-from .load_json import LoadJson
+from .config_json import ConfigJson
 
 def process_initialize_csv(tmp_paths, video):
         #パーツごとにCSVフォルダ生成&ファイルを初期化する
@@ -10,8 +10,8 @@ def process_initialize_csv(tmp_paths, video):
 
     #yoloに対応したディレクトリを作成している
     csv_paths = []
-    LJ = LoadJson("yolo_info.json")
-    landmark = LJ.load("landmark")
+    CJ = ConfigJson("cpr_app/information/yolo_info.json")
+    landmark = CJ.load_content("landmark")
     num_landmarks = range(landmark)
 
     #動画名のディレクトリを作成するために動画の拡張子を取り除いてる

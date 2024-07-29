@@ -7,9 +7,16 @@ class VideoData():
         fps = cap.get(cv2.CAP_PROP_FPS)
         #fps = 119.88
         self._fps = fps
-
         frame_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-        self._time = frame_count / fps
+        time = int(frame_count) / int(fps)
+        self._time  = int(time)
+        
+        
+        print("fps"+str(fps))
+        print(str(type(fps)))
+        print("frame count"+str(frame_count))
+        print(str(type(frame_count)))
+        print("time"+str(time))
 
 
     @property
