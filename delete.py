@@ -33,6 +33,23 @@ def delete_contents_of_directory(path):
     else:
         print(f"The path {path} does not exist")
 
+
+def delete_specific_file(path, file_name):
+    # 再帰的に指定されたディレクトリを探索
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if file == file_name:
+                file_path = os.path.join(root, file)
+                try:
+                    os.remove(file_path)
+                    print(f"Deleted: {file_path}")
+                except Exception as e:
+                    print(f"Failed to delete {file_path}: {e}")
+
+# 使用例
+path_to_search = "/home/watanabe/research/Docker-composes/flask_CPR_web_app"
+file_name_to_delete = "yolov8x-pose-p6.pt"  # 削除したいファイル名
+
 # 指定したパスの配列を入力してください
 directory_paths = [
     "cpr_app/static/result",
@@ -45,3 +62,5 @@ directory_paths = [
 
 for directory_path in directory_paths:
     delete_contents_of_directory(directory_path)
+
+delete_specific_file(path_to_search, file_name_to_delete)
