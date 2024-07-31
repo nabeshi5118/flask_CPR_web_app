@@ -4,13 +4,7 @@ import os
 class ConfigJson():
     def __init__(self,json_pass):
         self._json_pass = json_pass
-        #print(json_pass+ "start json")
         default = {}
-
-        # if not os.path.exists(json_pass):
-        # # 設定ファイルが存在しない場合、デフォルト設定で新しいファイルを作成
-        #     with open(json_pass,'w') as f:
-        #         json.dump(default,f,indent=4)
         # ファイルパスのディレクトリを確認し、存在しない場合は作成
         os.makedirs(os.path.dirname(json_pass), exist_ok=True)
 

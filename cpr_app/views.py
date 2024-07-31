@@ -41,6 +41,15 @@ def index():
 #
 @app.route('/upload', methods=['POST'])
 def upload_file():
+  cj = ConfigJson("cpr_app/information/input_info.json")
+ #テスト用データの処理が汚いからここ直したい
+  #キー名にtest_10を探している
+  if "test_10" in request.form:
+    print("テストデータ")
+    filepath = cj.load_content("filepath_10")
+    flash('アップロードが成功しました', 'success')
+    return redirect(url_for('analyze', filename=cj.load_content("filename_10")))
+  
   if 'file' not in request.files:
     flash('ファイルが選択されていません', 'error')
     return redirect(request.url)
@@ -52,16 +61,10 @@ def upload_file():
     return redirect(request.url)
 
   if file and allowed_file(file.filename):
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+    os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
     file.save(filepath)
     flash('アップロードが成功しました', 'success')
     return redirect(url_for('analyze', filename=file.filename))
-    #ファイル名に規則性をもたせる場合以下を利用
-    #name = change_filename()
-    #filepath = os.path.join(app.config['UPLOAD_FOLDER'],name)
-    #file.save(filepath)
-    #flash('アップロードが成功しました', 'success')
-    #return redirect(url_for('analyze',filename = name))
   else:
     flash('許可されていないファイル形式です', 'error')
     return redirect(request.url)

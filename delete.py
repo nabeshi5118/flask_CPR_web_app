@@ -64,3 +64,4 @@ for directory_path in directory_paths:
     delete_contents_of_directory(directory_path)
 
 delete_specific_file(path_to_search, file_name_to_delete)
+print("delete "+ file_name_to_delete)
