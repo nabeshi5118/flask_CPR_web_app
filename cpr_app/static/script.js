@@ -38,6 +38,7 @@ async function checkProgress(filename) {
   async function startProcessing(filename) {
     try {
       // サーバーのエンドポイントにPOSTリクエストを送信
+      //ここでviewspyのprogressを呼び出したい
       const response = await fetch(`/start_processing/${filename}`, {
         method: 'POST',
       });

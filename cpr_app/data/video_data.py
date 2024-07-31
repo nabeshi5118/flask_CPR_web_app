@@ -6,10 +6,12 @@ class VideoData():
         cap = cv2.VideoCapture(place)
         fps = cap.get(cv2.CAP_PROP_FPS)
         #fps = 119.88
-        self._fps = fps
+        self._fps = float(fps)
 
         frame_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
-        self._time = frame_count / fps
+        time = frame_count / fps
+        self._time = time
+        self._picture = fps * time
 
 
     @property
@@ -24,6 +26,9 @@ class VideoData():
     @property
     def fps(self):
         return self._fps
+    @property
+    def picture(self):
+        return self._picture
     
 
 

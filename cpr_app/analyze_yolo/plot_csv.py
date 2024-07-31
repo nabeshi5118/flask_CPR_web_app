@@ -52,13 +52,22 @@ def make_dict(pd_appro,compression_count,mean_tempo,appro_tempo_percent):
     return output
 
 
-    # outputs = {}
-    # outputs["compression_count"] = compression_count
-    # outputs["appro_recoils_percent"]= pd_appro.appro_recoils_percent
-    # outputs["appro_compression_percent"] = pd_appro.appro_compression_percent,
-    # outputs["mean_tempo"] = mean_tempo
-    # outputs["appro_tempo_percent"] = appro_tempo_percento
-    
+def check_person0(person0_values):
+# person0_values[0] が数値であるかを確認
+    if person0_values and isinstance(person0_values[0], (int, float)):
+        if np.isnan(person0_values[0]):
+            # NaNの場合の処理
+            print("person0_values[0] is NaN")
+            return 0
+        else:
+            # 有効な数値の場合の処理
+            print("person0_values[0] is a valid number")
+            return 1
+    else:
+        # 数値でない場合の処理
+        print("person0_values[0] is not a valid number or is empty")
+        return 0
+
     
 
 # CSVファイルをプロットする関数
@@ -68,9 +77,11 @@ def plot_csv_data(csv_filenames,output_pass, output_filename,fps,time):
     #v_infoの中身   mediapipe_flg, y_lim_upper, y_lim_lower, h_line_upper, h_line_lower,fps 
     # プロット用のグラフを作成
     #ピーク検出におけるノイズ除去の範囲
+    if check_person0 is 0:
+        return
+    
     v_info = vi()
     window_size = v_info.window_size()
-
 
     # 各CSVファイルを処理
     #webアプリの場合はキーポイント10番のみ取得するのでcsvファイルは一個しか読み込まないはず
@@ -221,6 +232,6 @@ def plot_csv_data(csv_filenames,output_pass, output_filename,fps,time):
 if __name__ == "__main__":
     print('YOLOv8')
     VD = VideoData('cpr_app/uploads/debug/debug.mp4')
-    plot_csv_data('cpr_app/outputs/csv/debug/10.csv','output_csv',VD.fps)
+    #plot_csv_data('cpr_app/outputs/csv/debug/10.csv','output_csv',VD.fps)
 
     
