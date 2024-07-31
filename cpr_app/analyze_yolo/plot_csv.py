@@ -11,7 +11,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'evaluation_system'))
 #from evaluation_system import compression_count as cc,interruption_presence as ip,compression_tempo as ct,recoil_and_depth as rd,compression_posture as cp
 from . import evaluation_cpr
 from . import peak_detect_plot
-from .plot_info import PlotInfo
 from .peak_data import PeakData ,PeakDataAppropriate
 from .value_info import ValueInfo as vi
 from cpr_app.config_json import ConfigJson
@@ -73,15 +72,27 @@ def check_person0(person0_values):
 # CSVファイルをプロットする関数
 #csv_file = cpr_app/outputs/filename/ファイル名_10.csv)
 #plot_csv_data(csv_file, 0, 1, 'Time', ['PersonID=0', 'PersonID=1'], 'Single Plot', 'MediaPipe.png', video.time(), mediapipe_flg=1)
-def plot_csv_data(csv_filenames,output_pass, output_filename,fps,time):
+def plot_csv_data(csv_filenames,fps,time,output_pass=None, output_filename=None):
     #v_infoの中身   mediapipe_flg, y_lim_upper, y_lim_lower, h_line_upper, h_line_lower,fps 
     # プロット用のグラフを作成
     #ピーク検出におけるノイズ除去の範囲
     if check_person0 is 0:
         return
     
-    v_info = vi()
-    window_size = v_info.window_size()
+    VI = ConfigJson("cpr_app/information/value_info.json")
+    PI = ConfigJson("cpr_app/information/plot_info.json")
+    CJ = ConfigJson("cpr_app/outputs/json/result.json")
+    window_size = VI.load_content("window_size")
+
+    if(output_pass != None and output_filename !=None):
+        save_path = output_pass + '/'+ output_filename
+        CJ.add_json({"image":save_path})
+    elif(output_pass == None and output_filename == None):
+        save_path = "/home/research"
+        print("plot_csvでパス指定してね")
+    else:
+        print("plot_csvで引数ミスってるよ")
+        return
 
     # 各CSVファイルを処理
     #webアプリの場合はキーポイント10番のみ取得するのでcsvファイルは一個しか読み込まないはず
@@ -137,7 +148,6 @@ def plot_csv_data(csv_filenames,output_pass, output_filename,fps,time):
 
     output = make_dict(pd_appro,compression_count,mean_tempo,appro_tempo_percent)
     #今はパスを直接書いてる
-    CJ = ConfigJson("cpr_app/outputs/json"+"/config.json")
     CJ.add_json(output)
 
     #print('---------- CPR評価 ----------')
@@ -173,9 +183,9 @@ def plot_csv_data(csv_filenames,output_pass, output_filename,fps,time):
     #plt.plot(x_times, person1_values, label=os.path.basename(csv_filename) + ', PersonID=1')
 
     # ラベル、タイトル、凡例、保存
-    pi = PlotInfo(csv_filename)
-    plt.xlabel(pi.x_labels()[0] if len(pi.x_labels()) == 1 else '')
-    plt.ylabel(pi.y_labels()[0] if len(pi.y_labels()) == 1 else '')
+
+    plt.xlabel(PI.load_content("x_labels"))
+    plt.ylabel(PI.load_content("y_labels"))
 
     high_lim = max(pd.recoil_values)+5
     low_lim = min(pd.depth_values)-5
@@ -186,7 +196,7 @@ def plot_csv_data(csv_filenames,output_pass, output_filename,fps,time):
     plt.grid(which = "both", axis="x")
     plt.title(os.path.basename(csv_filename))
     plt.legend(fontsize="xx-small")
-    plt.savefig(output_pass + '/'+ output_filename, dpi=300, bbox_inches='tight')
+    plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
     
 

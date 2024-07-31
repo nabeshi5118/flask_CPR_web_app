@@ -11,7 +11,16 @@ app.config['CSV_PASS'] = "cpr_app/outputs/csv"
 
 app.config['RESULT_PASS'] = "cpr_app/static/result"
 
-app.config['JSON_PASS'] = "cpr_app/outputs/json"
+app.config['JSON_RESULT'] = "cpr_app/outputs/json/result.json"
+app.config['JSON_PROGRESS'] = "cpr_app/outputs/json/progress.json"
+
+#informationの情報はプログラム中で上書きしない
+#テスト用データのパスについて書いてあるjson
+app.config['INPUT_INFO'] = "cpr_app/information/input_info.json"
+app.config['OUTPUT_INFO'] = "cpr_app/information/output_info.json"
+app.config['YOLO_INFO'] =  "cpr_app/information/yolo_info.json"
+app.config['PLOT_INFO'] = "cpr_app/information/plot_info.json"
+
 app.config['ERROR_MESSAGE'] = "yes"
 app.secret_key = 'hogehoge'
 
