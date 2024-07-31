@@ -1,4 +1,5 @@
 import cv2
+#解析を始めるビデオのデータを管理する
 class VideoData():
     def __init__(self,place):
         self._name = "output_data"
@@ -10,13 +11,14 @@ class VideoData():
         frame_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
         time = int(frame_count) / int(fps)
         self._time  = int(time)
+        self._frame_count = frame_count
         
         
-        print("fps"+str(fps))
-        print(str(type(fps)))
-        print("frame count"+str(frame_count))
-        print(str(type(frame_count)))
-        print("time"+str(time))
+        # print("fps"+str(fps))
+        # print(str(type(fps)))
+        # print("frame count"+str(frame_count))
+        # print(str(type(frame_count)))
+        # print("time"+str(time))
 
 
     @property
@@ -31,6 +33,9 @@ class VideoData():
     @property
     def fps(self):
         return self._fps
+    @property
+    def frame_count(self):
+        return self._frame_count
     
 
 

@@ -22,12 +22,12 @@ class YOLOv8Estimator:
         print(self.csv_paths,self.cache_path)
 
 
-    #json: 
+    #json: 結果出力用jsonファイルのパス　picture: 推定写真の合計枚数
     def estimation_algorithm(self,json = None,picture = None):
         """
         YOLOv8を使用して人体パーツの推定を行い、GUI描画と結果のCSVファイルへの書き込みを行うメソッド
         """
-        print("start")
+        print("start analyze yolo")
         #webアプリケーション用
         if json != None:
             status = CJ(json) 
@@ -107,8 +107,9 @@ class YOLOv8Estimator:
              
 def update_progress(status,count,total):
     #ここで100枚ごとにコメントを書いてる  
-    progress = float(count / total) 
+    progress = int((count / total)*100) 
     print("progress"+str(progress))
+
     i = {'progress':progress}
     status.add_json(i)
 

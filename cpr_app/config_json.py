@@ -4,7 +4,7 @@ import os
 class ConfigJson():
     def __init__(self,json_pass):
         self._json_pass = json_pass
-        print(json_pass+ "start json")
+        #print(json_pass+ "start json")
         default = {}
 
         # if not os.path.exists(json_pass):
