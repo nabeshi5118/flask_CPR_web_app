@@ -31,7 +31,7 @@ def cal_appropriate_recoil_compression(pd, upper_line, lower_line):#使った
   pd.setup_appro(appro_recoils_indexes,appro_compression_indexes,appro_recoils_percent,appro_compression_percent)
 
 
-def cal_mean_tempo(peak_upper_indexes, num_person0_values,compression_count, fps,time):
+def cal_mean_tempo(peak_upper_indexes, num_person0_values,compression_count, fps,time):#使った
     # 初期化
     tempo_list_sec = np.empty_like(peak_upper_indexes, dtype=float)
     # 初期化
@@ -60,7 +60,7 @@ def cal_mean_tempo(peak_upper_indexes, num_person0_values,compression_count, fps
     return mean_tempo_per_min, tempo_list_flame
 
 
-def cal_appropriate_tempo(tempo_list, fps, baseline_lower_bpm=100, baseline_upper_bpm=120):
+def cal_appropriate_tempo(tempo_list, fps, baseline_lower_bpm=100, baseline_upper_bpm=120):#使った
     # テンポの適正率を求める
     # 初期化
     appro_tempo_flag_list = np.empty_like(tempo_list, dtype=int)

@@ -1,4 +1,5 @@
 #plot_csv用
+データ保存用に残してる
 class PlotInfo():
     def __init__(self,csv_filenames):
         # これいらない？
@@ -18,16 +19,5 @@ class PlotInfo():
             self._x_labels = 'Time'
             self._y_labels = ['PersonID=0', 'PersonID=1']
             self._title = 'Single Plot'
-
-    def x_columns(self):
-        return self._x_columns
-    def y_columns(self):
-        return self._y_columns
-    def x_labels(self):
-        return self._x_labels
-    def y_labels(self):
-        return self._y_labels
-    def title(self):
-        return self._title
 
     
