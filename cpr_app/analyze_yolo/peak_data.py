@@ -1,7 +1,7 @@
 class PeakData:
     def __init__(self):
         #名前かぶりを避けるために頭に_を入れている
-        #インデックスの配列
+        #ピークのインデックスの配列
         #peak_upper_indexesとpeak_lower_indexesと書かれている場合あり
         self._recoil_order_list = []
         self._depth_order_list = []
