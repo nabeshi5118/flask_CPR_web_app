@@ -1,5 +1,7 @@
-*.pyc
+# __pycache__ ディレクトリと .pyc ファイルを無視
 __pycache__/
+*.pyc
 
-*.pyc
-__pycache__/
+# model ディレクトリ内の dataA.pt ファイルを無視
+model/
+
