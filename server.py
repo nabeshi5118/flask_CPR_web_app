@@ -11,7 +11,9 @@ app.config['CSV_PASS'] = "cpr_app/outputs/csv"
 
 app.config['RESULT_PASS'] = "cpr_app/static/result"
 
+#htmlで出力する結果を保存するjsonファイル
 app.config['JSON_RESULT'] = "cpr_app/outputs/json/result.json"
+#現在の進捗を保存するjsonファイル
 app.config['JSON_PROGRESS'] = "cpr_app/outputs/json/progress.json"
 
 #informationの情報はプログラム中で上書きしない

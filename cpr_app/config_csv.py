@@ -13,7 +13,7 @@ def process_initialize_csv(tmp_paths, video,data_path = None):
         print("CP")
     #yoloに対応したディレクトリを作成している
         CJ = ConfigJson(data_path)
-        landmark = CJ.load_content("landmark")
+        landmark = CJ.load("landmark")
         num_landmarks = range(landmark)
         #動画名のディレクトリを作成するために動画の拡張子を取り除いてる
         temporary_video = os.path.splitext(video)[0]

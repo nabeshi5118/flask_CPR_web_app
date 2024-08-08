@@ -46,7 +46,6 @@ def delete_specific_file(path, file_name):
                 except Exception as e:
                     print(f"Failed to delete {file_path}: {e}")
 
-# 使用例
 path_to_search = "/home/watanabe/research/Docker-composes/flask_CPR_web_app"
 file_name_to_delete = "yolov8x-pose-p6.pt"  # 削除したいファイル名
 
@@ -63,5 +62,4 @@ directory_paths = [
 for directory_path in directory_paths:
     delete_contents_of_directory(directory_path)
 
-delete_specific_file(path_to_search, file_name_to_delete)
-print("delete "+ file_name_to_delete)
+#delete_specific_file(path_to_search, file_name_to_delete)

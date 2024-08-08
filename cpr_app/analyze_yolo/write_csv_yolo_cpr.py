@@ -22,8 +22,8 @@ class YOLOv8Estimator:
         print(self.csv_paths,self.cache_path)
 
 
-    #json: 結果出力用jsonファイルのパス　picture: 推定写真の合計枚数
-    def estimation_algorithm(self,json = None,picture = None):
+    #json: 結果出力用jsonファイルのパス　flame: 推定写真の合計枚数
+    def estimation_algorithm(self,json = None,flame = None):
         """
         YOLOv8を使用して人体パーツの推定を行い、GUI描画と結果のCSVファイルへの書き込みを行うメソッド
         """
@@ -78,8 +78,8 @@ class YOLOv8Estimator:
                 print("finished",count)
                 #webアプリケーション用
                 if(json != None):
-                    print(str(picture))
-                    update_progress(status,count,picture)
+                    print(str(flame))
+                    update_progress(status,count,flame)
             
             if cv2.waitKey(5) & 0xFF == 27:
                 break
@@ -111,7 +111,7 @@ def update_progress(status,count,total):
     print("progress"+str(progress))
 
     i = {'progress':progress}
-    status.add_json(i)
+    status.add(i)
 
 # テストコード (インスタンス作成とメソッド呼び出し)
 if __name__ == "__main__":
