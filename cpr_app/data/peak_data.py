@@ -122,38 +122,6 @@ class PeakDataAppropriate(PeakData):
         print("Appro Recoils Percent:", self._appro_recoils_percent)
         print("Appro Compression Percent:", self._appro_compression_percent)
 
-# #ここでやりたいことはpeak_data_outputで
-# class PeakDataOutput(PeakDataAppropriate):
-#     #output用のデータを保存するclass
-#     #わかりにくいからちょっと整えてもいいかも
-#     def __init__(self,pd = None):
-        
-#         if pd is not None:
-#             super().__init__(pd)
-#         else:
-#             super().__init__()
-
-#     @property
-#     def evaluation_outputs(self):
-#         return self._evaluation_outputs
-    
-#     def set_output(self,pd,compression_count,mean_tempo,appro_tempo_percent):
-#         self._evaluation_outputs["compression_count"] = compression_count
-#         self._evaluation_outputs["appro_recoils_percent"]= pd.appro_recoils_percent
-#         self._evaluation_outputs["appro_compression_percent"] = pd.appro_compression_percent,
-#         self._evaluation_outputs["mean_tempo"] = mean_tempo
-#         self._evaluation_outputs["appro_tempo_percent"] = appro_tempo_percent
-    
-#     def add_output(self,index_text,data):
-#         self._evaluation_outputs[index_text] = data
-
-#     def swap_output(self,data):
-#         self._evaluation_outputs = {}
-#         self._evaluation_outputs = data
-
-
-
-
 
 
 

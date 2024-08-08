@@ -2,7 +2,7 @@ import numpy as np
 from scipy.signal import find_peaks
 from scipy.ndimage.filters import maximum_filter
 #ここでは、ピークの検出方法をまとめている
-# 2種類のピーク検出
+# 2種類のピーク検出とscipyを用いた検出方法
 #ウィンドウを用いた検出方法
 def peak_detect_window(data, window_size=80):
 

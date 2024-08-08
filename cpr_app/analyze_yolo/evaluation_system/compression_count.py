@@ -7,7 +7,7 @@ def exe_peak_detection(data, window_size):
 
   if abs( len(depth_order_list) - len(recoil_order_list)) >= 1:
     recoil_order_list, depth_order_list = adjust_peak(recoil_order_list, depth_order_list, data)
-  # ピークが無い場合の対処
+  # ピークが無い場合の対処　とりあえずなんか入れている
   if len(recoil_order_list) == 0:
     recoil_order_list = np.array([1])
   if len(depth_order_list) == 0:
@@ -67,25 +67,26 @@ def adjust_peak(recoil_order_list, depth_order_list, data):
     depth_order_list = np.array([0])
   # ピークの個数が多いリストと少ないリストを特定
   major_list, minor_list = (recoil_order_list, depth_order_list) if len(recoil_order_list) > len(depth_order_list) else (depth_order_list, recoil_order_list)
+  #True,Falseで判別
   is_recoil_major = major_list is recoil_order_list
-  """
-  # ピークが先に来ている方が個数が多い方なら少ない方の追加、個数が少ない方なら多い方の削除
-  if major_list[0] < minor_list[0]:
-    # ピークの個数が多いリストを調整
-    major_list, minor_list = add_peak(major_list, minor_list, data, is_recoil_major)
-  else:
-    # ピークの個数が少ないリストを調整
-    major_list, minor_list = reject_peak(major_list, minor_list, data, is_recoil_major)
   
-  # ver.2
-  # ピークの個数が多いリストがrecoilの場合は、recoilを減らす
-  if is_recoil_major:
-    major_list, minor_list = reject_peak(major_list, minor_list, data, is_recoil_major)
-  # ピークの個数が多いリストがdepthの場合は、depthを増やす
-  else:
-    major_list, minor_list = add_peak(major_list, minor_list, data, is_recoil_major)
-  # ピークの個数が多いリストがrecoilだった場合は順番を戻す
-  """
+  # # ピークが先に来ている方が個数が多い方なら少ない方の追加、個数が少ない方なら多い方の削除
+  # if major_list[0] < minor_list[0]:
+  #   # ピークの個数が多いリストを調整
+  #   major_list, minor_list = add_peak(major_list, minor_list, data, is_recoil_major)
+  # else:
+  #   # ピークの個数が少ないリストを調整
+  #   major_list, minor_list = reject_peak(major_list, minor_list, data, is_recoil_major)
+  
+  # # ver.2
+  # # ピークの個数が多いリストがrecoilの場合は、recoilを減らす
+  # if is_recoil_major:
+  #   major_list, minor_list = reject_peak(major_list, minor_list, data, is_recoil_major)
+  # # ピークの個数が多いリストがdepthの場合は、depthを増やす
+  # else:
+  #   major_list, minor_list = add_peak(major_list, minor_list, data, is_recoil_major)
+  # # ピークの個数が多いリストがrecoilだった場合は順番を戻す
+  
   if is_recoil_major:
     #major_list, minor_list = reject_peak(major_list, minor_list, data, is_recoil_major)
     return major_list, minor_list

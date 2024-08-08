@@ -3,54 +3,7 @@ from .peak_data import PeakData
 
 # plot_csv用
 # 2種類のピーク検出
-def peak_detect_window(data, window_size=80):
-
-    peaks_upper = np.zeros(len(data))
-    peaks_lower = np.zeros(len(data))
-
-    for i in range(len(data) - window_size):
-        window = data[i:i+window_size]
-        recoil = max(window)
-        depth = min(window)
-        if data[i+window_size//2] == recoil:
-            peaks_upper[i+window_size//2] = recoil
-        if data[i+window_size//2] == depth:
-            peaks_lower[i+window_size//2] = depth
-
-    recoil_order_list = np.where(peaks_upper != 0)[0]
-    recoil_values = np.delete(peaks_upper, np.where(peaks_upper == 0))
-    depth_order_list = np.where(peaks_lower != 0)[0]
-    depth_values = np.delete(peaks_lower, np.where(peaks_lower == 0))
-    
-    if abs( len(recoil_order_list) - len(depth_order_list)) > 1:
-        recoil_order_list, depth_order_list, recoil_values, depth_values = adjust_peak(recoil_order_list, depth_order_list, recoil_values, depth_values, data)
-    
-    recoil_count = len(recoil_order_list)    
-    depth_count = len(depth_order_list)
-    
-    return recoil_count, depth_count, recoil_order_list, recoil_values, depth_order_list, depth_values
-
-def peak_detect_diff(data):
-    recoil_count = 0
-    depth_count = 0
-    peaks_upper = np.zeros(len(data))
-    peaks_lower = np.zeros(len(data))
-
-    for i in range(1, len(data) - 1):
-        if data[i] > data[i-1] and data[i] > data[i+1]:
-            recoil_count += 1
-            peaks_upper[i] = data[i]
-        if data[i] < data[i-2] and data[i] < data[i+2]:
-            depth_count += 1
-            peaks_lower[i] = data[i]
-            
-    recoil_order_list = np.where(peaks_upper != 0)[0]
-    recoil_values = np.delete(peaks_upper, np.where(peaks_upper == 0))
-    depth_order_list = np.where(peaks_lower != 0)[0]
-    depth_values = np.delete(peaks_lower, np.where(peaks_lower == 0))
-    
-    return recoil_count, depth_count, recoil_order_list, recoil_values, depth_order_list, depth_values
-
+#ここにpeak_detectにあった２つのピーク検出方法が有った
 def peak_detect_find_peaks(data, pd, window_size):#利用
     #x座標,y座標,正解率
     from scipy.signal import find_peaks_cwt, find_peaks,medfilt
@@ -82,6 +35,7 @@ def peak_detect_find_peaks(data, pd, window_size):#利用
     return pd
 
 # recoilとdepthの個数調整
+# evaluation_systemでも存在を確認
 def adjust_peak(pd, data):#利用
     if len(pd.recoil_order_list()) - len(pd.depth_order_list()) > 1:
         # recoilの方が多い場合,

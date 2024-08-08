@@ -14,7 +14,7 @@ from . import peak_detect_plot
 from .peak_data import PeakData ,PeakDataAppropriate
 from .value_info import ValueInfo as vi
 from cpr_app.config_json import ConfigJson
-from cpr_app.video_data import VideoData
+from cpr_app.data.video_data import VideoData
 
 # from .compression_data import CompressionData
 
@@ -78,15 +78,17 @@ def plot_csv_data(csv_filenames,fps,time,output_pass=None, output_filename=None)
     #ピーク検出におけるノイズ除去の範囲
     if check_person0 is 0:
         return
-    
+    #固定値の情報が入っているjson
     VI = ConfigJson("cpr_app/information/value_info.json")
+    #plot画像の情報が入っているjson
     PI = ConfigJson("cpr_app/information/plot_info.json")
+    #結果出力用jsonファイル
     CJ = ConfigJson("cpr_app/outputs/json/result.json")
-    window_size = VI.load_content("window_size")
+    window_size = VI.load("window_size")
 
     if(output_pass != None and output_filename !=None):
         save_path = output_pass + '/'+ output_filename
-        CJ.add_json({"image":save_path})
+        CJ.add({"image":save_path})
     elif(output_pass == None and output_filename == None):
         save_path = "/home/research"
         print("plot_csvでパス指定してね")
@@ -132,8 +134,8 @@ def plot_csv_data(csv_filenames,fps,time,output_pass=None, output_filename=None)
     #実際のコードはどうなっているのか確認
     #print("recoil_value")
     #print(pd.recoil_values)
-    upper_line = 754
-    lower_line = 715
+    upper_line = VI.load("upper_line")#754
+    lower_line = VI.load("lower_line")#715
 
     pd_appro = PeakDataAppropriate(pd)
 
@@ -148,7 +150,7 @@ def plot_csv_data(csv_filenames,fps,time,output_pass=None, output_filename=None)
 
     output = make_dict(pd_appro,compression_count,mean_tempo,appro_tempo_percent)
     #今はパスを直接書いてる
-    CJ.add_json(output)
+    CJ.add(output)
 
     #print('---------- CPR評価 ----------')
     #print("--- 圧迫回数 ---")
@@ -184,8 +186,8 @@ def plot_csv_data(csv_filenames,fps,time,output_pass=None, output_filename=None)
 
     # ラベル、タイトル、凡例、保存
 
-    plt.xlabel(PI.load_content("x_labels"))
-    plt.ylabel(PI.load_content("y_labels"))
+    plt.xlabel(PI.load("x_labels"))
+    plt.ylabel(PI.load("y_labels"))
 
     high_lim = max(pd.recoil_values)+5
     low_lim = min(pd.depth_values)-5
