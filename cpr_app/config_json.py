@@ -33,24 +33,20 @@ class ConfigJson():
             return tmp_dict[word][tmp_i][tmp_j]
 
     #jsonデータを辞書にして送る
-    def dict(self,json_pass = None):
-        if json_pass == None:
-            with open(self._json_path, 'r', encoding='utf-8') as file:
-                data = json.load(file)
-            return data
-        
+    def dict(self,json_path = None):
+        if json_path == None:
+            data = path_to_dict(self._json_path)
         else:
-            with open(json_pass, 'r', encoding='utf-8') as file:
-                data = json.load(file)
-            return data
+            data = path_to_dict(json_path)
+        return data
 
-#ここでしか使わない、パスから辞書を返す
+#パスから辞書を返す
 def path_to_dict(json_path):
         with open(json_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
         return data
 
-#ここでしか使わない、パスからディレクトリを作って初期化する
+#パスからディレクトリを作って初期化する
 def mkdir_setup(json_path):
     os.makedirs(os.path.dirname(json_path), exist_ok=True)
 

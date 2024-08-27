@@ -6,6 +6,7 @@ def exe_peak_detection(data, window_size):
   recoil_order_list, depth_order_list = peak_detect.peak_detect_scipy(data, window_size)
 
   if abs( len(depth_order_list) - len(recoil_order_list)) >= 1:
+    #このプログラム内だと個数が多い方をrecoilにしている
     recoil_order_list, depth_order_list = adjust_peak(recoil_order_list, depth_order_list, data)
   # ピークが無い場合の対処　とりあえずなんか入れている
   if len(recoil_order_list) == 0:
@@ -15,6 +16,7 @@ def exe_peak_detection(data, window_size):
 
   return recoil_order_list, depth_order_list
 
+#このコード内でのみ利用
 def add_peak(major_list, minor_list, data, is_recoil_major):
   # ピークの個数が少ないリストを調整
   for i in range(len(major_list) - 1):
@@ -39,6 +41,7 @@ def add_peak(major_list, minor_list, data, is_recoil_major):
       
   return major_list, minor_list
 
+#このコード内でのみ利用
 def reject_peak(major_list, minor_list, data, is_recoil_major):
   # ピークの個数が多いリストを調整
   for i in range(2,len(minor_list)):
@@ -59,6 +62,7 @@ def reject_peak(major_list, minor_list, data, is_recoil_major):
   return major_list, minor_list
 
 # recoilとdepthの個数調整
+#peak_detect_plot内で同様のものを確認
 def adjust_peak(recoil_order_list, depth_order_list, data):
   # ピークが無い場合の対処
   if len(recoil_order_list) == 0:
@@ -95,6 +99,7 @@ def adjust_peak(recoil_order_list, depth_order_list, data):
 
 # 中断の有無後に実行 圧迫回数、recoil・depthのピークリストを返す
 def cal_compression_count(data, recoil_order_list, depth_order_list, interruption_pair_list):
+  #中断判定のところを消そうとしてる
   for interruption_pair in interruption_pair_list:
     for recoil in recoil_order_list:
       if interruption_pair[0] <= recoil <= interruption_pair[1]:

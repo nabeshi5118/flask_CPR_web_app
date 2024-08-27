@@ -16,6 +16,7 @@ def check_interruption(x_lines, fps, wrist_list, recoil_order_list, depth_order_
     frame_arrays = np.concatenate((interruption_1, interruption_2, interruption_2_2, interruption_3))
     frame_arrays = np.delete(frame_arrays, np.nonzero(frame_arrays==-1))
     frame_arrays = np.unique(np.sort(frame_arrays))
+    #中断判定を探す鍵かも
     interruption_pair_list = find_contiguous_pairs(frame_arrays)
 
     interruption_sec_list = np.array([(end - start + 1) / fps for start, end in interruption_pair_list])
