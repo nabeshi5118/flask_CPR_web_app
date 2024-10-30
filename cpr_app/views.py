@@ -98,8 +98,6 @@ def progress(filename):
   output_video = app.config['RESULT_PASS'] + '/'+ OI.load("video")
 
   print(output_video)
-  print("outputあああ")
-
 
   #実際には、姿勢推定しつつ、csvに書き込んでいる
   JP.add({'message':'姿勢推定中',"progress":0,"step":1})
@@ -117,7 +115,8 @@ def progress(filename):
 
   JP.add({"message":"グラフ作成中","progress":0,"step":3})
   #キーポイントは10番の右手首で行ってみる(要確認)
-  print(video.time)
+
+  print("video time"+str(video.time))
   plot_csv.plot_csv_data(csv_paths,video.fps,video.time,app.config['RESULT_PASS'],OI.load("csv"))
   JP.add({"progress":100})
   print("finish step3")

@@ -16,18 +16,6 @@ from .value_info import ValueInfo as vi
 from cpr_app.config_json import ConfigJson
 from cpr_app.data.video_data import VideoData
 
-# from .compression_data import CompressionData
-
-# CSVファイルを読み込む関数
-#必要なさそうだったら消す
-# def read_csv(filename):
-#     # CSVファイルをNumPy配列に読み込み、正規化する(y座標のみ)
-#     #data = np.genfromtxt(filename, delimiter=',', usecols=(1,4),invalid_raise=False).T
-#     data = np.genfromtxt(filename, delimiter=',', usecols=1,invalid_raise=False).T
-#     data = data/1080
-#     return data
-  
-
 def read_csv(filename):#利用
     # CSVファイルをNumPy配列に読み込む(y座標のみ)
     data = np.genfromtxt(filename, delimiter=',', usecols=1).T
@@ -71,13 +59,10 @@ def check_person0(person0_values):
 
 # CSVファイルをプロットする関数
 #csv_file = cpr_app/outputs/filename/ファイル名_10.csv)
-#plot_csv_data(csv_file, 0, 1, 'Time', ['PersonID=0', 'PersonID=1'], 'Single Plot', 'MediaPipe.png', video.time(), mediapipe_flg=1)
-def plot_csv_data(csv_filenames,fps,time,output_pass=None, output_filename=None):
-    #v_infoの中身   mediapipe_flg, y_lim_upper, y_lim_lower, h_line_upper, h_line_lower,fps 
+def plot_csv_data(csv_filenames,fps_video,time_video,output_pass=None, output_filename=None):
     # プロット用のグラフを作成
     #ピーク検出におけるノイズ除去の範囲
-    if check_person0 is 0:
-        return
+
     #固定値の情報が入っているjson
     VI = ConfigJson("cpr_app/information/value_info.json")
     #plot画像の情報が入っているjson
@@ -85,6 +70,7 @@ def plot_csv_data(csv_filenames,fps,time,output_pass=None, output_filename=None)
     #結果出力用jsonファイル
     CJ = ConfigJson("cpr_app/outputs/json/result.json")
     window_size = VI.load("window_size")
+
 
     if(output_pass != None and output_filename !=None):
         save_path = output_pass + '/'+ output_filename
@@ -98,7 +84,6 @@ def plot_csv_data(csv_filenames,fps,time,output_pass=None, output_filename=None)
 
     # 各CSVファイルを処理
     #webアプリの場合はキーポイント10番のみ取得するのでcsvファイルは一個しか読み込まないはず
-    #for i,csv_filename in enumerate(csv_filenames):
 
     #デバックのために必要
     if isinstance(csv_filenames,list): 
@@ -112,7 +97,6 @@ def plot_csv_data(csv_filenames,fps,time,output_pass=None, output_filename=None)
     
     # Nanの処理
     # 先頭がNaNの場合は0に置き換える
-    # ここで、空の配列の場合、エラー吐いちゃう、対策必要かも
     if np.isnan(person0_values[0]):
         person0_values[0] = 0
     # NaNのインデックスを取得
@@ -124,7 +108,6 @@ def plot_csv_data(csv_filenames,fps,time,output_pass=None, output_filename=None)
     pd = PeakData()
     pd = peak_detect_plot.peak_detect_find_peaks(person0_values,pd, window_size)
 
-    #peak_detect.peak_detect_window(person0_values, 10)
     
     # CPR評価関数
     #圧迫回数
@@ -141,47 +124,29 @@ def plot_csv_data(csv_filenames,fps,time,output_pass=None, output_filename=None)
 
     evaluation_cpr.cal_appropriate_recoil_compression(pd_appro,upper_line, lower_line)
 
-    mean_tempo, tempo_list = evaluation_cpr.cal_mean_tempo(pd_appro.recoil_order_list, len(person0_values),compression_count,fps,time)
+    mean_tempo, tempo_list = evaluation_cpr.cal_mean_tempo(pd_appro.recoil_order_list, len(person0_values),compression_count,fps_video,time_video)
     print("mean_tempo,tempolist")
     print(mean_tempo)
     print(tempo_list)
 
-    appro_tempo_percent = evaluation_cpr.cal_appropriate_tempo(tempo_list,fps)
+    appro_tempo_percent = evaluation_cpr.cal_appropriate_tempo(tempo_list,fps_video)
 
     output = make_dict(pd_appro,compression_count,mean_tempo,appro_tempo_percent)
     #今はパスを直接書いてる
     CJ.add(output)
 
-    #print('---------- CPR評価 ----------')
-    #print("--- 圧迫回数 ---")
-    #print(compression_count)
-    #print("--- 圧迫解除適性率 ---")
-    #print(appro_recoils_percent)
-    #print("--- 圧迫深度適性率 ---")
-    #print(appro_compression_percent)
-    #print("--- 平均テンポ  ---")
-    #print(mean_tempo)
-    #print("--- テンポの適性率  ---")
-    #print(appro_tempo_percent)
-
-    
-    # 圧迫適性
-    #plt.scatter(appro_compression_indexes/fps, person0_values[appro_compression_indexes], marker='*', facecolor='None', edgecolors='c', label="Appropriate Recoil: "+str(len(appro_compression_indexes))+' times')
-    #plt.scatter(appro_recoils_indexes/fps, person0_values[appro_recoils_indexes], marker='*', facecolor='None', edgecolors='m', label="Appropriate Depth: "+str(len(appro_recoils_indexes))+' times')
-
-    
     # ピーク検出
     plt.figure(figsize=(10,6))
-    plt.scatter(pd.depth_order_list/fps, person0_values[pd.depth_order_list], marker='o', facecolor='None', edgecolors='green', label="Recoil: "+str(pd.peak_depth_count)+' times')
-    plt.scatter(pd.recoil_order_list/fps, person0_values[pd.recoil_order_list], marker='o', facecolor='None', edgecolors='red', label="Depth: "+str(pd.peak_recoil_count)+' times')
+    plt.scatter(pd.depth_order_list/fps_video, person0_values[pd.depth_order_list], marker='o', facecolor='None', edgecolors='green', label="Recoil: "+str(pd.peak_depth_count)+' times')
+    plt.scatter(pd.recoil_order_list/fps_video, person0_values[pd.recoil_order_list], marker='o', facecolor='None', edgecolors='red', label="Depth: "+str(pd.peak_recoil_count)+' times')
 
     
     #　csvデータ
     # print('確認')
     # pd_appro.print_contents()
-
-    x_times = np.arange(len(data)) / fps
-    plt.plot(x_times, person0_values, label="sample")
+    #プロットできるようにtimeを変更
+    time_v = np.linspace(0, float(time_video), len(person0_values))
+    plt.plot(time_v, person0_values, label="sample")
     #plt.plot(x_times, person1_values, label=os.path.basename(csv_filename) + ', PersonID=1')
 
     # ラベル、タイトル、凡例、保存
@@ -202,48 +167,10 @@ def plot_csv_data(csv_filenames,fps,time,output_pass=None, output_filename=None)
     plt.close()
     
 
-    #plt.xlim(0,len(x_times)/fps+1)
-    #plt.ylim(y_lim_upper, y_lim_lower)
-    #一部切り取りに変更。以下を一時的にコメントアウト。いらなそうなら消す
-    # plt.xlim(0,4)
-    # plt.ylim(0.75, 0.6)
-    # plt.minorticks_on()
-    # #plt.grid(which = "both", axis="x")
-    # #メモリを縦と横に追加    
-    # plt.grid(which = "both")
-    # plt.title(os.path.basename(csv_filename))
-    # plt.legend(fontsize="xx-small")
-    # plt.hlines(h_line_lower,0,130,'green')
-    # plt.hlines(h_line_upper,0,130, 'red')
-    # plt.savefig('/home/watanabe/research/Docker-composes/CPR-research/chest_compression/output/'+output_filename,dpi=300,bbox_inches='tight')
-    # #一旦上に保存する
-    # #plt.savefig('/Container/chest_compression/output/' + output_filename, dpi=300, bbox_inches='tight')
-    # plt.close()
-    
-
-# # right 4, left 7
-# place = '/media/watanabe/SPD-2TB'
-# group = 'GroupH_trim'
-# student = 's1270043'
-# #num_cprは01とか0をつけないとダメ
-# num_cpr = '07'
-# reference_hand = 'right'
-# h_line_lower = 0.835
-# h_line_upper = 0.875
-# y_lim_lower = 0.4
-# y_lim_upper = 0.9
-# window_size = 7
-# if reference_hand == 'right':
-#     num_keypoint = '4'
-#     yolo_keypoint = '10'
-# elif reference_hand == 'left':
-#     num_keypoint = '7'
-#     yolo_keypoint = '9'
-
 
 if __name__ == "__main__":
     print('YOLOv8')
     VD = VideoData('cpr_app/uploads/debug/debug.mp4')
-    #plot_csv_data('cpr_app/outputs/csv/debug/10.csv','output_csv',VD.fps)
+    #plot_csv_data('cpr_app/outputs/csv/debug/10.csv','output_csv',VD.fps_video)
 
     
