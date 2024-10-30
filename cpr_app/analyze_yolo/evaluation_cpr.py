@@ -2,13 +2,13 @@ import numpy as np
 from .peak_data import PeakData
 import copy
 
-def cal_compare_compression(peak_recoil_count,peak_depth_count):
+def cal_compare_compression(peak_recoil_count,peak_depth_count):#Used
   # リコイルと圧迫の回数を比較して、少ない方を採用　（要修正）
   compression_count = min(peak_recoil_count, peak_depth_count)
   return compression_count
 
 
-def cal_appropriate_recoil_compression(pd, upper_line, lower_line):#使った
+def cal_appropriate_recoil_compression(pd, upper_line, lower_line):#Used
   # 圧迫解除・深度適性率を求める
   #複製の作成
 
@@ -30,8 +30,9 @@ def cal_appropriate_recoil_compression(pd, upper_line, lower_line):#使った
   
   pd.setup_appro(appro_recoils_indexes,appro_compression_indexes,appro_recoils_percent,appro_compression_percent)
 
-
-def cal_mean_tempo(peak_upper_indexes, num_person0_values,compression_count, fps,time):#使った
+#back_upに保存してある
+#平均テンポの計算
+def cal_mean_tempo(peak_upper_indexes, num_person0_values,compression_count, fps,time):#Used
     # 初期化
     tempo_list_sec = np.empty_like(peak_upper_indexes, dtype=float)
     # 初期化
@@ -59,8 +60,8 @@ def cal_mean_tempo(peak_upper_indexes, num_person0_values,compression_count, fps
     
     return mean_tempo_per_min, tempo_list_flame
 
-
-def cal_appropriate_tempo(tempo_list, fps, baseline_lower_bpm=100, baseline_upper_bpm=120):#使った
+#backupに保存してる
+def cal_appropriate_tempo(tempo_list, fps, baseline_lower_bpm=100, baseline_upper_bpm=120):#Used
     # テンポの適正率を求める
     # 初期化
     appro_tempo_flag_list = np.empty_like(tempo_list, dtype=int)
@@ -78,38 +79,3 @@ def cal_appropriate_tempo(tempo_list, fps, baseline_lower_bpm=100, baseline_uppe
 
     appro_tempo_percent = np.sum(appro_tempo_flag_list) / len(appro_tempo_flag_list)
     return appro_tempo_percent
-
-# def cal_mean_tempo(peak_upper_indexes, num_person0_values,fps):#使った
-#   # 今後リアルタイムに適応させる
-#   #初期化
-#   #num_person0_valueはperson0_valueの長さ
-#   tempo_list = np.empty_like(peak_upper_indexes)
-
-#   #インデックス番号と内容を入手できる
-#   #なんでここpeak_upper_indexesを使ってるの？
-
-#   for i, peak_upper_index in enumerate(peak_upper_indexes):
-#     if i == 0:
-#       tempo_list[i] = num_person0_values / peak_upper_index
-#     else:
-#       tempo_list[i] = num_person0_values / (peak_upper_index - peak_upper_indexes[i-1])
-#   mean_tempo = np.sum(tempo_list) / len(peak_upper_indexes)
-#   #mean_tenpoは平均のテンポ、tempo_listはそれぞれのテンポのリスト 
-#   return mean_tempo, tempo_list
-
-#def cal_appropriate_tempo(tempo_list,time):#使った
-  # # テンポの適性率を求める
-  # # 初期化
-  # appro_tempo_flag_list = np.empty_like(tempo_list, dtype=int)
-
-  # tempo_lower = time * 100 // 60
-  # tempo_upper = time * 120 // 60
-  # for i, tempo in enumerate(tempo_list):
-  #   #ここのテンポの上限下限を調整したい気持ちがある
-  #   if tempo >= tempo_lower and tempo <= tempo_upper:
-  #     appro_tempo_flag_list[i] = 1
-  #   else:
-  #     appro_tempo_flag_list[i] = 0
-  # appro_tempo_percent = np.sum(appro_tempo_flag_list) / len(appro_tempo_flag_list)
-  # return appro_tempo_percent
-  

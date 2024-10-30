@@ -4,7 +4,7 @@ from .peak_data import PeakData
 # plot_csv用
 # 2種類のピーク検出
 #ここにpeak_detectにあった２つのピーク検出方法が有った
-def peak_detect_find_peaks(data, pd, window_size):#利用
+def peak_detect_find_peaks(data, pd, window_size):
     #x座標,y座標,正解率
     from scipy.signal import find_peaks_cwt, find_peaks,medfilt
     from scipy.ndimage.filters import maximum_filter
@@ -27,7 +27,7 @@ def peak_detect_find_peaks(data, pd, window_size):#利用
     #absは絶対値をintで返す
     #圧迫の深さとリコイルの差が1以上のとき、差がなくなるように調整する
     if abs( len(pd.recoil_order_list) - len(pd.depth_order_list)) > 1:
-        pd = adjust_peak(pd, data)
+        pd = adjust_peak_flask(pd, data)
     
     #upper_countとlower_count
     pd.setup_count(len(pd.recoil_order_list),len(pd.depth_order_list))
@@ -36,7 +36,7 @@ def peak_detect_find_peaks(data, pd, window_size):#利用
 
 # recoilとdepthの個数調整
 # evaluation_systemでも存在を確認
-def adjust_peak(pd, data):#利用
+def adjust_peak_flask(pd, data):
     if len(pd.recoil_order_list()) - len(pd.depth_order_list()) > 1:
         # recoilの方が多い場合,
         for i in  range(len(pd.recoil_order_list)):

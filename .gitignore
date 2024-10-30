@@ -2,6 +2,6 @@
 __pycache__/
 *.pyc
 
-# model ディレクトリ内の dataA.pt ファイルを無視
+# model ディレクトリ内のファイルを無視
 model/
 
