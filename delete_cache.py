@@ -1,5 +1,14 @@
 import os
 import shutil
+class DeleteCache():
+    def __init__(self):
+        self._path = "cpr_app/outputs/"
+        self._file_names = ["cache","csv","json"]
+
+    def delete_cache(self):
+        for name in self._file_names:
+            path = self._path + name
+            delete_contents_of_directory(path)
 
 def count_files_and_dirs(path):
     file_count = 0
@@ -46,20 +55,21 @@ def delete_specific_file(path, file_name):
                 except Exception as e:
                     print(f"Failed to delete {file_path}: {e}")
 
-path_to_search = "/home/watanabe/research/Docker-composes/flask_CPR_web_app"
-file_name_to_delete = "yolov8x-pose-p6.pt"  # 削除したいファイル名
 
-# 指定したパスの配列を入力してください
-directory_paths = [
-    "cpr_app/static/result",
-    "cpr_app/uploads",
-    "cpr_app/outputs/cache",
-    "cpr_app/outputs/csv",
-    "cpr_app/outputs/json"
-    # 他のパスを追加
-]
+if __name__ == "__main__":
+    path_to_search = "/home/watanabe/research/Docker-composes/flask_CPR_web_app"
+    file_name_to_delete = "yolov8x-pose-p6.pt"  # 削除したいファイル名
 
-for directory_path in directory_paths:
-    delete_contents_of_directory(directory_path)
+    # 指定したパスの配列を入力してください
+    directory_paths = [
+        "cpr_app/static/result",
+        "cpr_app/uploads",
+        "cpr_app/outputs/cache",
+        "cpr_app/outputs/csv",
+        "cpr_app/outputs/json"
+        # 他のパスを追加
+    ]
+    for directory_path in directory_paths:
+        delete_contents_of_directory(directory_path)
 
-#delete_specific_file(path_to_search, file_name_to_delete)
+    #delete_specific_file(path_to_search, file_name_to_delete)
